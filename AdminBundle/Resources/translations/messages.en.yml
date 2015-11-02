@@ -1,0 +1,28 @@
+admin:
+  registration_event:
+    message:
+      has_been_added: "Registration Event has been added"
+      has_been_updated: "Registration Event has been updated"
+      has_been_deleted: "Registration Event has been deleted"
+      has_been_published: "Registration Event has been published"
+      has_been_unpublished: "Registration Event has been unpublished"
+      delete_confirmation: "Are you sure you want delete the event?"
+    field:
+      id: "Id"
+      domain: "Domain"
+      venue: "Venue"
+      address: "Address"
+      city: "City"
+      state: "State"
+      country: "Country"
+      postal_code: "Zip/Postal Code"
+      date: "Date"
+      published: "Published"
+      time_groups: "Talent Groups"
+  time_group:
+    add_group: "Add Group"
+    remove_group: "Remove Group"
+    field:
+      time: "Time"
+      capacity: "Capacity"
+      amount: "Current amount"

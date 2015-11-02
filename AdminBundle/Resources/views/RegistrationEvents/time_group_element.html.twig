@@ -1,0 +1,11 @@
+<tr>
+    <td>{{ form_widget(form.time) }}</td>
+    <td><div class="col-sm-9">{{ form_widget(form.capacity) }}</div></td>
+    <td>{{ form_widget(form.amount) }}</td>
+    <td><a href="#" class="remove-time-group" title="{{ 'admin.time_group.remove_group'|trans }}"><span class="glyphicon glyphicon-remove"></span></a></td>
+</tr>
+<tr class="errors">
+    <td class="has-error">{{ form_errors(form.time) }}</td>
+    <td class="has-error">{{ form_errors(form.capacity) }}</td>
+    <td class="has-error">{{ form_errors(form.amount) }}</td>
+</tr>

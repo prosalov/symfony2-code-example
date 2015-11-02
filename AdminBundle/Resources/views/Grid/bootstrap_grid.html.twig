@@ -1,0 +1,122 @@
+{% extends "KitpagesDataGridBundle:Grid:bootstrap-grid.html.twig" %}
+
+{% block kit_grid_before_table %}
+    <div class="table-responsive">
+{% endblock %}
+
+{% block kit_grid_after_table %}
+    </div>
+{% endblock %}
+
+{% block kit_grid_filter %}
+    <div class="clearfix">
+        {{ block('kit_grid_additional_buttons') }}
+        <form class="form-inline pull-right" action="{{ grid.requestUri }}" id="{{grid.filterFormName}}_form"
+              method="GET">
+            <div class="form-group">
+                <label class="sr-only" for="{{grid.filterFormName}}">{{ "grid.filter" | trans }}</label>
+                <input class="form-control" type="text" name="{{grid.filterFormName}}"
+                       placeholder="{{ "grid.filter" | trans }}" id="{{grid.filterFormName}}"
+                       value="{{ grid.filterValue }}" />
+            </div>
+
+            <button type="submit" class="btn"
+                    value="{{ "grid.apply" | trans }}">{{ "grid.apply" | trans }}</button>
+            <a href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) }}"
+               class="btn btn-link" id="{{grid.filterFormName}}_reset_button">{{ "grid.reset" | trans }}</a>
+        </form>
+    </div>
+{% endblock %}
+
+{% block kit_grid_thead %}
+    <thead>
+        <tr>
+            {{ block('kit_grid_thead_before_column') }}
+            {% for field in grid.gridConfig.fieldList %}
+                {% if field.visible %}
+                    {% set sortClass = grid.getSortCssClass(field.fieldName) %}
+                    <th{% if sortClass %} class="{{ sortClass }}"{% endif %}>
+                        {% if field.sortable %}
+                            <a href="{{ grid.getSortUrl(field.fieldName) }}">
+                                {{ field.label | trans }}
+                                <span class="glyphicon"></span>
+                            </a>
+                        {% else %}
+                            {{ field.label | trans }}
+                        {% endif %}
+                    </th>
+                {% endif %}
+            {% endfor %}
+        {{ block('kit_grid_thead_column') }}
+        </tr>
+    </thead>
+{% endblock %}
+
+{% block kit_grid_tbody %}
+<tbody>
+{% for item in grid.itemList %}
+    <tr class="{% if loop.index % 2 == 0 %}kit-grid-even {% else %}kit-grid-odd {% endif %}">
+        {% block kit_grid_tbody_before_column %}{%endblock%}
+        {% for field in grid.gridConfig.fieldList %}
+            {% if field.visible %}
+                <td class="kit-grid-cell-{{ field.fieldName | replace({'.': '-'}) }}">
+                    {% if field.translatable %}
+                        {{ grid.displayGridValue ( item, field) | raw | trans }}
+                    {% else %}
+                        {{ grid.displayGridValue ( item, field) | raw }}
+                    {% endif %}
+                </td>
+            {% endif %}
+        {% endfor %}
+        {{ block('kit_grid_tbody_column') }}
+    </tr>
+{% else %}
+    {% block kit_grid_no_data %}
+    <tr>
+        <td colspan="{{ grid.gridConfig.fieldList | length }}" class="kit-grid-no-data">{{ "grid.no_data" | trans }}</td>
+    </tr>
+    {% endblock %}
+{% endfor %}
+</tbody>
+{% endblock %}
+
+{% block kit_grid_paginator %}
+    {% set paginator = grid.paginator %}
+    {% if paginator.totalPageCount > 1%}
+        <div class="text-right kit-paginator-bootstrap">
+            <ul class="pagination">
+                {% if not paginator.previousButtonPage %}
+                    <li class="disabled">
+                        <span>&laquo;</span>
+                    </li>
+                {% else %}
+                    <li>
+                        <a href="{{ paginator.getUrl("currentPage",paginator.previousButtonPage) }}" title="previous">&laquo;</a>
+                    </li>
+                {% endif %}
+
+                {% for page in paginator.pageRange %}
+                    {% if page != paginator.currentPage %}
+                        <li>
+                            <a href="{{ paginator.getUrl("currentPage",page) }}">{{ page }}</a>
+                        </li>
+                    {% else %}
+                        <li class="active">
+                            <a href="#">{{ page }}</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+
+                {% if not paginator.nextButtonPage %}
+                    <li class="disabled">
+                        <span>&raquo;</span>
+                    </li>
+                {% else %}
+                    <li>
+                        <a href="{{ paginator.getUrl("currentPage",paginator.nextButtonPage)}}" title="next">&raquo;</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    {% endif %}
+{% endblock %}

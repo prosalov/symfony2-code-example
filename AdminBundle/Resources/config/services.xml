@@ -1,0 +1,32 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+
+        <service id="admin.menu_builder" class="AdminBundle\Menu\MenuBuilder">
+            <property name="factory" type="service" id="knp_menu.factory" />
+            <property name="security" type="service" id="security.context" />
+        </service>
+
+        <service id="admin.menu" class="Knp\Menu\MenuItem" scope="request"
+                 factory-service="admin.menu_builder" factory-method="createMenu">
+            <tag name="knp_menu.menu" alias="admin.menu" />
+        </service>
+
+        <service id="admin.menu.voter.uri_request" class="AdminBundle\Menu\Voter\UriRequestVoter">
+            <tag name="knp_menu.voter" request="true" />
+        </service>
+
+        <service id="admin.form.registration_event_type" class="AdminBundle\Form\RegistrationEventType">
+            <argument>%domains%</argument>
+            <tag name="form.type" alias="admin_registration_event" />
+        </service>
+
+        <service id="admin.form.time_group_type" class="AdminBundle\Form\TimeGroupType">
+            <tag name="form.type" alias="admin_time_group" />
+        </service>
+        
+    </services>
+</container>

@@ -1,0 +1,47 @@
+{% extends 'MopaBootstrapBundle::base.html.twig' %}
+
+{% block head_style %}
+    {% stylesheets '@admin_bundle_less' '@chosen_css'  '@bootstrap_datepicker_css' '@bootstrap_timepicker_less' output='css/admin/layout.css' %}
+        <link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block head_script %}
+    {% javascripts '@jquery_js' output='js/admin/jquery.js' %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block foot_script_assetic %}
+    {% javascripts '@admin_bundle_js' '@bootstrap_js' '@bootstrap_datepicker_js' '@bootstrap_timepicker_js' '@chosen_js' output='js/admin/layout.js' %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block title %}{{ 'admin.title'|trans }}{% endblock title %}
+
+{% block navbar %}
+    {% embed '@MopaBootstrap/Navbar/navbar.html.twig' with { fixedTop: true, staticTop: false, inverse: true } %}
+        {% block brand %}
+            <a class="navbar-brand" href="{{ url('homepage') }}">{{ 'app.name'|trans }}</a>
+        {% endblock %}
+
+        {% block menu %}
+            {{ mopa_bootstrap_menu('admin.menu', {'automenu': 'navbar', template: 'AdminBundle:Menu:default.html.twig'}) }}
+        {% endblock %}
+    {% endembed %}
+{% endblock %}
+
+{% block footer %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <p class="text-muted">&copy; {{ 'now'|date('Y') }} {{ 'app.name'|trans }}</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block headline %}{% endblock %}
+
+{% block content %}{% endblock %}

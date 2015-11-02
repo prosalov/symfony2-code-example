@@ -1,0 +1,63 @@
+{% extends 'AdminBundle::layout.html.twig' %}
+
+{% block title %}{{ 'grid.title.index'|trans }} - {{ parent() }}{% endblock title %}
+
+{% block headline %}{{ 'grid.title.index'|trans }}{% endblock headline %}
+
+{% block content %}
+    <div class="col-md-12">
+        {% embed 'AdminBundle:Grid:bootstrap_grid.html.twig' with {'grid': grid} %}
+            {% block kit_grid_additional_buttons %}
+                <a class="btn btn-default" href="{{ path ("admin_registration_events_new") }}" title="{{ 'grid.new' | trans }}">
+                    <span class="glyphicon glyphicon-plus"></span> {{ 'grid.new' | trans }}
+                </a>
+            {% endblock %}
+
+            {% block kit_grid_thead_column %}
+                <th>{{ 'admin.registration_event.field.published'|trans }}</th>
+                <th class="actions">{{ 'grid.actions'|trans }}</th>
+            {% endblock %}
+
+            {% block kit_grid_tbody_column %}
+                <td>
+                    <a href="{{ path('admin_registration_events_toggle_is_published', { 'id': item.id}) }}">
+                        {% if item.isPublished %}
+                            <span class="glyphicon glyphicon-ok-circle"></span>
+                        {% else %}
+                            <span class="glyphicon glyphicon-remove-circle"></span>
+                        {% endif %}
+                    </a>
+                </td>
+                <td class="actions">
+                    <div class="grid-actions btn-group">
+                        <a class="btn btn-default btn-xs"
+                           href="{{ path ("admin_registration_events_edit", {"id": item.id}) }}" title="{{ 'grid.edit' | trans }}">
+                            <span class="glyphicon glyphicon-edit"></span>
+                        </a>
+                        <a  class="del-confirm btn btn-default btn-xs" href="#" data-toggle="modal" data-target="#confirm-delete"
+                            data-href="{{ path ("admin_registration_events_delete", {"id": item.id}) }}" title="{{ 'grid.delete' | trans }}">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </a>
+                    </div>
+                </td>
+            {% endblock %}
+        {% endembed %}
+    </div>
+    <div id="confirm-delete" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span>&times;</span><span class="sr-only">{{ 'admin.form.cancel'|trans }}</span>
+                    </button>
+                    <h4 class="modal-title">{{ 'admin.confirmation.delete.title'|trans }}</h4>
+                </div>
+                <div class="modal-body">{{ 'admin.registration_event.message.delete_confirmation'|trans }}</div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'admin.form.cancel' | trans }}</button>
+                    <a href="#" class="btn btn-danger">{{ 'admin.form.delete' | trans }}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

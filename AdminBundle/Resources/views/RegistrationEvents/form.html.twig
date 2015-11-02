@@ -1,0 +1,82 @@
+{% extends 'AdminBundle::layout.html.twig' %}
+
+{% block headline %}
+    {% if form.vars.data.id %}
+        {{ 'form.edit'|trans }}
+    {% else %}
+        {{ 'form.new'|trans }}
+    {% endif %}
+{% endblock headline %}
+
+{% block title %}
+    {% if form.vars.data.id %}
+        {{ 'form.edit'|trans }}
+    {% else %}
+        {{ 'form.new'|trans }}
+    {% endif %}
+    - {{ parent() }}
+{% endblock title %}
+
+{% block foot_script_assetic %}
+    {{ parent() }}
+    {% javascripts '@country_state_city_js' '@admin_registration_event_js' %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    <script type="text/javascript">
+        urlState = '{{ path('ajax_states') }}';
+        urlCity = '{{ path('ajax_cities') }}';
+        formName = '{{ form.vars.name }}';
+    </script>
+{% endblock %}
+
+{% block content %}
+    <div id="registration-event-form">
+        {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+            {{ form_row(form.venue) }}
+            {{ form_row(form.address) }}
+            {{ form_row(form.country) }}
+            {{ form_row(form.state) }}
+            {{ form_row(form.city) }}
+            {{ form_row(form.postalCode) }}
+            {{ form_row(form.date) }}
+            {{ form_row(form.domain) }}
+            {% do form.time_groups.setRendered %}
+            <div class="form-group">
+                <label for="admin_registration_time_groups" class="control-label col-sm-3 required">
+                    {{ 'admin.registration_event.field.time_groups'|trans }}
+                </label>
+                <div class="col-sm-9">
+                <table id="time-groups">
+                    <thead>
+                    <tr>
+                        <th>{{ 'admin.time_group.field.time'|trans }}</th>
+                        <th>{{ 'admin.time_group.field.capacity'|trans }}</th>
+                        <th>{{ 'admin.time_group.field.amount'|trans }}</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for time_group in form.time_groups %}
+                        {{ include('AdminBundle:RegistrationEvents:time_group_element.html.twig', { 'form': time_group }) }}
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <a href="#" id="add-time-group" title="{{ 'admin.time_group.add_group'|trans }}"
+                   data-prototype="
+                       {% filter escape %}
+                           {{ include('AdminBundle:RegistrationEvents:time_group_element.html.twig', { 'form': form.time_groups.vars.prototype }) }}
+                       {% endfilter %}
+                    ">
+                    <span class="glyphicon glyphicon-plus"></span>
+                </a>
+                </div>
+            </div>
+            <p class="clearfix">
+                <span class="pull-right">
+                    <a class="btn btn-default" href="{{ path('admin_registration_events_list') }}">{{ 'form.cancel'|trans }}</a>
+                    <button type="submit" class="btn btn-primary">{{ 'form.save'|trans }}</button>
+                </span>
+            </p>
+        {{ form_end(form) }}
+    </div>
+{% endblock content %}
